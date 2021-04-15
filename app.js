@@ -4,7 +4,7 @@ const port = 3000;
 const userRouter = require("./api/users/user.router")
 
 app.get('/', (req, res) => {
-  res.send('<h1>Express Demo App</h1> <h4>Message: Success</h4> <p>Version 1.1</p>');
+  res.send('<h1>College Bus App</h1> <h4>Message: Success</h4> <p>Version 1.1</p>');
 })
 
 
@@ -13,10 +13,10 @@ app.use(express.urlencoded({ extended: true }))
 
 app.get('/sunil', function (req, res) {
 
-    return res.status(200).json({
-        "Status": "Server Running",
-        "message": "Hi ! Welcome to the server , My Boss name is Seraj Alam if you have any query please contact him at +919140327455"
-    });
+  return res.status(200).json({
+    "Status": "Server Running",
+    "message": "Hi ! Welcome to the server , My Boss name is Seraj Alam if you have any query please contact him at +919140327455"
+  });
 });
 
 
@@ -34,6 +34,6 @@ app.get('/products', (req, res) => {
   ])
 })
 
-app.listen(port, ()=> {
+app.listen(port, () => {
   console.log(`Demo app is up and listening to port: ${port}`);
 })
