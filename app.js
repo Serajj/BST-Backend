@@ -19,6 +19,15 @@ app.get('/sunil', function (req, res) {
   });
 });
 
+app.get('/data', function (req, res) {
+  const body = req.body;
+  return res.status(200).json({
+    "Status": "Server Running",
+    "message": "Hi ! Welcome to the server , My Boss name is Seraj Alam if you have any query please contact him at +919140327455",
+    'body': body
+  });
+});
+
 
 app.use('/api/users', userRouter);
 app.get('/products', (req, res) => {
