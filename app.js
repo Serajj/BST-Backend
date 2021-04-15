@@ -10,6 +10,7 @@ app.get('/', (req, res) => {
 
 
 app.use(express.urlencoded({ extended: true }))
+app.use(express.json());
 
 app.get('/sunil', function (req, res) {
 
