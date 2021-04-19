@@ -2,10 +2,9 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const userRouter = require("./api/users/user.router")
-const adminRouter = require("./admin/admin.router")
 
 app.get('/', (req, res) => {
-  res.send('<h1>College Bus Tracking App</h1> <h4>Message: Success</h4> <p>Version 1.1</p>');
+  res.send('<h1>College Bus App</h1> <h4>Message: Success</h4> <p>Version 1.1</p>');
 })
 
 
@@ -30,9 +29,6 @@ app.get('/data', function (req, res) {
   });
 });
 
-
-
-app.use('/admin', adminRouter);
 
 app.use('/api/users', userRouter);
 app.get('/products', (req, res) => {
