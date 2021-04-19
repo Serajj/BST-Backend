@@ -9,10 +9,6 @@ router.get('/', (req, res) => {
 
 });
 
-router.post('/getUser', checkToken, getUserById);
 
-router.post('/deleteUser', checkToken, delUserById);
-
-router.post('/login', loginUser);
 
 module.exports = router;
