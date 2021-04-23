@@ -2,7 +2,8 @@
 
 const router = require('express').Router();
 
-const { indexView, mapView, loginView, loginValidate, driverView } = require('./homeController');
+
+const { indexView, mapView, loginView, loginValidate, driverView, routeView, busView, stoppageView } = require('./homeController');
 const { checkLogin } = require('../auth/checklogin');
 
 
@@ -15,6 +16,12 @@ router.post('/login', loginValidate);
 router.get('/maps', checkLogin, mapView);
 
 router.get('/driver', checkLogin, driverView);
+
+router.get('/routes', checkLogin, routeView);
+
+router.get('/bus', checkLogin, busView);
+
+router.post('/stoppage', checkLogin, stoppageView);
 
 
 

@@ -21,6 +21,22 @@ const driverView = (req, res, next) => {
     res.render('driver', { 'username': req.session.name });
 }
 
+const busView = (req, res, next) => {
+    res.render('buses', { 'username': req.session.name });
+}
+
+
+const routeView = (req, res, next) => {
+    res.render('routes', { 'username': req.session.name });
+}
+
+const stoppageView = (req, res, next) => {
+    var rid = req.body.route_id;
+
+    console.log(rid);
+    res.render('stops', { 'username': req.session.name });
+}
+
 
 const loginValidate = (req, res, next) => {
 
@@ -105,6 +121,9 @@ module.exports = {
     mapView,
     loginView,
     loginValidate,
-    driverView
+    driverView,
+    busView,
+    routeView,
+    stoppageView
 
 }
