@@ -7,6 +7,8 @@ const adminRouter = require('./admin/routerAdmin');
 const expressLayouts = require('express-ejs-layouts');
 const path = require('path');
 
+var session = require('express-session');
+
 
 app.set('view engine', 'ejs');
 
@@ -15,8 +17,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.get('/', (req, res) => {
-  res.send('<h1>College Bus App</h1> <h4>Message: Success</h4> <p>Version 1.1</p>');
+  res.redirect('/admin');
 })
+
+
+
+
+app.use(session({
+  secret: 'secret',
+  resave: true,
+  saveUninitialized: true
+}));
 
 
 

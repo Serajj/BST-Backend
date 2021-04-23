@@ -56,7 +56,7 @@ module.exports = {
             'select * from users where username = ? or roll_no= ?',
             [
                 data.username,
-                data.roll_no
+                data.username
             ],
             (error, results, fields) => {
                 if (error) {
