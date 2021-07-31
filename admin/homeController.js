@@ -2,6 +2,7 @@
 const pool = require('../config/database');
 const { genSaltSync, hashSync, compareSync } = require('bcrypt');
 const { loginUser } = require('../api/users/user.service');
+let alert = require('alert');
 
 
 const indexView = (req, res, next) => {
@@ -18,25 +19,272 @@ const loginView = (req, res, next) => {
 }
 
 const driverView = (req, res, next) => {
-    res.render('driver', { 'username': req.session.name });
+
+    pool.query(
+
+        "select name, phone, address, city, state, pincode from drivers",
+        [
+
+        ],
+        (error, drivers, fields) => {
+
+            res.render('driver', { 'username': req.session.name, drivers: drivers });
+
+        }
+    );
+
+
 }
+const addDriverView = (req, res, next) => {
+    res.render('addDriver', { 'username': req.session.name });
+}
+
+
+const addDriverViewPost = (req, res) => {
+    const body = req.body;
+
+    console.log("Hello I am approaching");
+    console.log(body);
+
+    pool.query(
+        'insert into drivers (name, phone, address, city, state, pincode, password) values (?,?,?,?,?,?,?)',
+        [
+            body.name,
+            body.phone,
+            body.address,
+            body.city,
+            body.state,
+            body.pincode,
+            body.password,
+        ],
+        (error, results, fields) => {
+            if (error) {
+                alert(error);
+                return res.render('driver', { 'username': req.session.name });
+            }
+            alert('Driver Added Successfully!!');
+            return res.redirect('driver');
+        }
+    );
+
+}
+
+
+
 
 const busView = (req, res, next) => {
     res.render('buses', { 'username': req.session.name });
 }
 
+const addBusView = (req, res, next) => {
+    res.render('addbus', { 'username': req.session.name });
+}
+
+
+
+
+
+
+
+const serviceView = (req, res, next) => {
+    res.render('services', { 'username': req.session.name });
+
+}
+
+const addServiceView = (req, res, next) => {
+
+    pool.query(
+
+        "select name,id from routes",
+        [
+
+        ],
+        (error, routes, fields) => {
+            console.log(routes);
+            pool.query(
+                "select 'bus_no','id','bus_name','bus_type' from buses",
+                [
+
+                ],
+                (error, buses, fields) => {
+
+                    pool.query(
+                        "select 'name','phone' from drivers",
+                        [
+
+                        ],
+                        (error, drivers, fields) => {
+                            res.render('addservice', { 'username': req.session.name, drivers: drivers, buses, buses, routes: routes });
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+
+
+
+}
+
+
+const serviceData = (req, res, next) => {
+
+
+
+    pool.query(
+        'select * from services',
+        [
+
+        ],
+        (error, results, fields) => {
+
+            if (error) {
+
+                res.status(200).json({ success: false, data: error });
+
+            } else {
+                res.status(200).json({ success: true, data: results });
+            }
+
+
+
+        }
+    );
+
+
+
+}
+
 
 const routeView = (req, res, next) => {
-    res.render('routes', { 'username': req.session.name });
+
+
+
+    pool.query(
+        'select * from routes',
+        [
+
+        ],
+        (error, results, fields) => {
+            var routes = [];
+            if (error) {
+                alert(error);
+
+
+            } else {
+                routes = results;
+            }
+
+
+            res.render('routes', { 'username': req.session.name, routes: routes });
+        }
+    );
+
+
+
 }
+
 
 const stoppageView = (req, res, next) => {
     var rid = req.body.route_id;
+    var rname = req.body.route_name;
+    console.log(rname);
+    if (rid) {
+        console.log(rid);
+        req.session.routeid = rid;
+        req.session.route_name = rname;
+    } else {
+        console.log("no rid");
+    }
 
-    console.log(rid);
-    res.render('stops', { 'username': req.session.name });
+    pool.query(
+        'select * from stops where route_id=?',
+        [
+            req.session.routeid
+        ],
+        (error, results, fields) => {
+            var routes = [];
+            if (error) {
+                alert(error);
+
+
+            } else {
+                routes = results;
+            }
+
+
+            res.render('stops', { 'username': req.session.name, routes: routes, routename: rname });
+        }
+    );
+
+
+    //res.render('stops', { 'username': req.session.name });
 }
 
+const addStoppageView = (req, res, next) => {
+
+    res.render('addStops', { 'username': req.session.name });
+}
+
+const addStoppageViewPost = (req, res, next) => {
+
+    const body = req.body;
+
+    pool.query(
+        'insert into stops (name,route_id,lattitude,longitude) values (?,?,?,?)',
+        [
+            body.stop_name,
+            req.session.routeid,
+            body.last_lattitude,
+            body.last_longitude
+        ],
+        (error, results, fields) => {
+            if (error) {
+                alert(error);
+                res.render('routes', { 'username': req.session.name });
+            }
+            alert('Stop Added Successfully!!');
+            res.redirect('stoppage');
+        }
+    );
+
+    // res.render('stops', { 'username': req.session.name });
+}
+
+
+// add data
+
+const addRouteView = (req, res, next) => {
+    res.render('addroute', { 'username': req.session.name });
+}
+const addRouteViewPost = (req, res, next) => {
+
+    const body = req.body;
+
+    pool.query(
+        'insert into routes (route_name, last_lattitude, last_longitude) values (?,?,?)',
+        [
+            body.route_name,
+            body.last_lattitude,
+            body.last_longitude
+        ],
+        (error, results, fields) => {
+            if (error) {
+                alert(error);
+                res.render('routes', { 'username': req.session.name });
+            }
+            alert('Route Added Successfully!!');
+            res.redirect('routes');
+        }
+    );
+
+
+}
 
 const loginValidate = (req, res, next) => {
 
@@ -122,8 +370,18 @@ module.exports = {
     loginView,
     loginValidate,
     driverView,
+    addDriverView,
+    addDriverViewPost,
     busView,
     routeView,
-    stoppageView
+    stoppageView,
+    addRouteView,
+    addRouteViewPost,
+    addStoppageView,
+    addStoppageViewPost,
+    addBusView,
+    serviceView,
+    serviceData,
+    addServiceView
 
 }

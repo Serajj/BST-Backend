@@ -3,8 +3,10 @@
 const router = require('express').Router();
 
 
-const { indexView, mapView, loginView, loginValidate, driverView, routeView, busView, stoppageView } = require('./homeController');
+const { indexView, mapView, loginView, loginValidate, driverView, routeView, busView, stoppageView, addRouteView, addRouteViewPost, addStoppageView, addStoppageViewPost, addBusView, serviceView, serviceData, addServiceView, addDriverView, addDriverPostView, addDriverViewPost } = require('./homeController');
 const { checkLogin } = require('../auth/checklogin');
+const pool = require('../config/database');
+const alert = require('alert');
 
 
 router.get('/', checkLogin, indexView);
@@ -16,12 +18,33 @@ router.post('/login', loginValidate);
 router.get('/maps', checkLogin, mapView);
 
 router.get('/driver', checkLogin, driverView);
+router.get('/addDriver', checkLogin, addDriverView)
+router.post('/addDriver', checkLogin, addDriverViewPost);
+
 
 router.get('/routes', checkLogin, routeView);
 
 router.get('/bus', checkLogin, busView);
+router.get('/addBus', checkLogin, addBusView)
 
-router.post('/stoppage', checkLogin, stoppageView);
+
+
+
+router.all('/stoppage', checkLogin, stoppageView);
+
+router.get('/addStoppage', checkLogin, addStoppageView);
+router.post('/addStoppage', checkLogin, addStoppageViewPost);
+
+router.get('/addRoute', checkLogin, addRouteView);
+
+router.post('/addRoute', checkLogin, addRouteViewPost);
+
+router.get('/service', checkLogin, serviceView);
+
+router.get('/addService', checkLogin, addServiceView);
+
+router.get('/getServiceData', checkLogin, serviceData);
+
 
 
 

@@ -1,0 +1,94 @@
+<%- include('./includes/header.ejs') %>
+
+    <div class="header bg-primary pb-6">
+        <div class="container-fluid">
+            <div class="header-body">
+                <div class="row align-items-center py-4">
+                    <div class="col-lg-6 col-7">
+                        <h6 class="h2 text-white d-inline-block mb-0">Add new bus</h6>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Page content -->
+    <div class="container-fluid mt--6">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <!-- Card header -->
+                    <div class="card-header border-0">
+                        <h3 class="mb-0">Add Bus</h3>
+                    </div>
+                    <!-- Light table -->
+                    <div class="table-responsive p-5">
+
+                        <form method="POST">
+
+                            <div class="form-row">
+
+                                <div class="col-md-4 mb-3">
+                                    <label for="validationCustom01">Bus name</label>
+                                    <select class="form-control" name="bus_name" required>
+                                        <option value="Mini">Mini</option>
+                                        <option value="Mini">Macro</option>
+                                        <option value="Mini">Van</option>
+                                    </select>
+
+                                </div>
+
+
+
+
+                            </div>
+
+
+
+
+
+                            <div class="form-row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="validationCustom01">Bus Number</label>
+                                    <input type="text" class="form-control" name="bus_no" placeholder="UP 32 EH 1234"
+                                        required>
+
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="validationCustom02">Capacity</label>
+                                    <select type="text" class="form-control" name="bus_type" required>
+                                        <option value="40">20</option>
+                                        <option value="40">40</option>
+                                        <option value="40">60</option>
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+
+                            <button class="btn btn-primary" type="submit">Add Bus</button>
+                        </form>
+
+
+
+                    </div>
+                    <!-- Card footer -->
+                    <div class="card-footer py-4">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+    <%- include('./includes/footer.ejs') %>

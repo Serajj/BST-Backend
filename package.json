@@ -2,6 +2,7 @@
     "name": "aws-node-test",
     "version": "0.0.1",
     "dependencies": {
+        "alert": "^5.0.10",
         "bcrypt": "^5.0.1",
         "body-parser": "^1.19.0",
         "dotenv": "^8.2.0",
