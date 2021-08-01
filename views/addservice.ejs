@@ -28,32 +28,23 @@
                         <form method="POST">
 
                             <div class="form-row">
-
                                 <div class="col-md-4 mb-3">
-                                    <label for="validationCustom01">Bus name</label>
-                                    <select class="form-control" name="bus_name" required>
-                                        <option value="Mini">Mini</option>
-                                        <option value="Mini">Macro</option>
-                                        <option value="Mini">Van</option>
+                                    <label for="validationCustom01">Service Number</label>
+                                    <select class="form-control" name="service_no" required>
+                                        <% for(var i=0; i< 1001 ; i++) {%>
+                                        <option value="<%= i %>"><%= i %></option>
+
+                                        <% } %>
                                     </select>
 
                                 </div>
-
-
-
-
-                            </div>
-
-
-
-
-
-                            <div class="form-row">
                                 <div class="col-md-4 mb-3">
+                                    <input type="text" name="route_id" id="route_id" style="display: none;"/>
+                                    <input type="text" name="route_name" id="route_name" style="display: none;"/>
                                     <label for="validationCustom01">Route Name</label>
-                                    <select type="text" class="form-control" name="route_name">
+                                    <select type="text" class="form-control" onchange="setrouteValues(this.value)" name="wer">
                                         <% routes.forEach(function(r) { %>
-                                            <option value="<%= r.route_name %>">
+                                            <option value="<%= r.route_name + '/' + r.id %>">
                                                 <%= r.route_name %>
                                             </option>
 
@@ -62,37 +53,43 @@
                                     </select>
 
                                 </div>
-                                <div class="col-md-4 mb-3">
-                                    <label for="validationCustom02">Capacity</label>
-                                    <select type="text" class="form-control" name="bus_type" required>
-                                        <option value="40">20</option>
-                                        <option value="40">40</option>
-                                        <option value="40">60</option>
-                                    </select>
-
-                                </div>
-
                             </div>
 
                             <div class="form-row">
+
                                 <div class="col-md-4 mb-3">
                                     <label for="validationCustom01">Bus Number</label>
-                                    <input type="text" class="form-control" name="bus_no" placeholder="UP 32 EH 1234"
-                                        required>
+                                    <select class="form-control" name="bus_no" required>
+                                        <% buses.forEach(function(r) { %>
+                                            <option value="<%= r.bus_no %>">
+                                                <%= r.bus_no %>
+                                            </option>
 
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label for="validationCustom02">Capacity</label>
-                                    <select type="text" class="form-control" name="bus_type" required>
-                                        <option value="40">20</option>
-                                        <option value="40">40</option>
-                                        <option value="40">60</option>
+                                            <% }); %>
                                     </select>
 
                                 </div>
 
-                            </div>
+                                <div class="col-md-4 mb-3">
+                                    <input type="text" name="driver_id" id="did" style="display: none;"/>
+                                    <input type="text" name="driver_name" id="d_name" style="display: none;"/>
+                                    <input type="text" name="driver_phone" id="d_phone" style="display: none;"/>
+                                    <label for="validationCustom01">Select Driver</label>
+                                    <select class="form-control" name="ddata" onchange="setdriverValues(this.value)"  required>
+                                        <% drivers.forEach(function(r) { %>
+                                            <option value="<%= r.name+'/'+r.phone+'/'+ r.id %>">
+                                                <%= r.name + " ( "+ r.phone+ ")" %>
+                                            </option>
 
+                                            <% }); %>
+                                    </select>
+
+                                </div>
+
+
+
+
+                            </div>
 
                             <button class="btn btn-primary" type="submit">Add Service</button>
                         </form>
@@ -112,7 +109,33 @@
     </div>
 
 
+<script>
+    function setdriverValues(data){
+        const myArr = data.split("/");
+      console.log(myArr[0]);
+      console.log(myArr[1]);
+      console.log(myArr[2]);
 
+      $('#did').val(myArr[2]);
+      $('#d_name').val(myArr[0]);
+      $('#d_phone').val(myArr[1]);
+
+
+
+    }
+
+    function setrouteValues(data){
+        const myArr = data.split("/");
+      console.log(myArr[0]);
+      console.log(myArr[1]);
+   
+
+    
+      $('#route_id').val(myArr[1]);
+      $('#route_name').val(myArr[0]);
+
+    }
+</script>
 
 
 

@@ -1,9 +1,179 @@
 const { genSaltSync, hashSync, compareSync } = require('bcrypt');
 const { create, getUser, deleteUser, loginUser } = require('./user.service');
-
+const pool = require('../../config/database');
 const { sign } = require('jsonwebtoken')
 
 
+
+const getQuardinates = (req, res, next) => {
+console.log(req.body);
+    if(!req.body.sid){
+        return res.status(200).json({
+            status: 0,
+            data: [],
+            message: "Please provide Service ID first"
+        })
+    }
+
+
+    pool.query(
+        'select route_id from services where service_id= ?',
+        [
+          req.body.sid
+        ],
+        (error, results, fields) => {
+
+            if (error || results.length ==0) {
+
+                return res.status(200).json({
+                    status: 0,
+                    data: [],
+                    message: "Invalid ID : " +error
+                })
+
+            } else {
+                var rid=results[0].route_id;
+
+                pool.query(
+                    'SELECT stops.name,stops.lattitude, stops.longitude , routes.last_lattitude , routes.last_longitude FROM stops INNER JOIN routes ON stops.route_id = routes.id WHERE stops.route_id = ?',
+                    [
+                      rid
+                    ],
+                    (error, results, fields) => {
+        
+                        if (error) {
+                            return res.status(200).json({
+                                status: 0,
+                                data: [],
+                                message: "Invalid ID : " +error
+                            })
+                        }else{
+
+                            return res.status(200).json({
+                                status: 1,
+                                data:results ,
+                                message: "Stops coordinates !!"
+                            })
+                        }
+                        
+                    }
+                );
+
+
+                
+            }
+
+
+
+        }
+    );
+
+
+
+}
+
+
+const updateData = (req, res, next) => {
+    console.log(req.body);
+        if(!req.body.sid || !req.body.current_lat || !req.body.current_long || !req.body.current_stop || !req.body.next_stop || !req.body.status){
+            return res.status(200).json({
+                status: 0,
+                data: [],
+                message: "Please provide all details : current_lat , current_long, current_stop , next_stop , status, sid"
+            })
+        }
+    
+    
+        pool.query(
+            'select route_id from services where service_id= ?',
+            [
+              req.body.sid
+            ],
+            (error, results, fields) => {
+    
+                if (error || results.length ==0) {
+    
+                    return res.status(200).json({
+                        status: 0,
+                        data: [],
+                        message: "Invalid ID : " +error
+                    })
+    
+                }     
+            }
+        );
+
+        pool.query(
+            'UPDATE `services` SET `current_lat`= ? ,`current_long`=?,`current_stop`= ?,`next_stop`= ?,`status`= ? WHERE service_id= ?',
+            [
+                req.body.current_lat,
+                req.body.current_long,
+                req.body.current_stop,
+                req.body.next_stop,
+                req.body.status,
+                req.body.sid
+            ],
+            (error, results, fields) => {
+    
+                if (error || results.length ==0) {
+    
+                    return res.status(200).json({
+                        status: 0,
+                        data: [],
+                        message: "Invalid ID : " +error
+                    })
+    
+                }else{
+                    return res.status(200).json({
+                        status: 1,
+                        message: "Updated"
+                    })
+                }     
+            }
+        );
+    
+    
+    
+    }
+
+
+const getData = (req, res, next) => {
+        console.log(req.body);
+            if(!req.body.sid ){
+                return res.status(200).json({
+                    status: 0,
+                    data: [],
+                    message: "Please provide sid"
+                })
+            }
+        
+        
+            pool.query(
+                'select * from services where service_id= ?',
+                [
+                  req.body.sid
+                ],
+                (error, results, fields) => {
+        
+                    if (error || results.length ==0) {
+        
+                        return res.status(200).json({
+                            status: 0,
+                            data: [],
+                            message: "Invalid ID : " +error
+                        })
+        
+                    }else{
+                        return res.status(200).json({
+                            status: 1,
+                            data:results,
+                            message: "Fetched successfully!"
+                        })
+                    }    
+                }
+            );
+  
+        }
 
 module.exports = {
     createUser: (req, res) => {
@@ -140,5 +310,8 @@ module.exports = {
 
         })
 
-    }
+    },
+    getQuardinates,
+    updateData,
+    getData
 }

@@ -34,11 +34,10 @@
 
                                     <th scope="col" class="sort" data-sort="route">Route Name</th>
                                     <th scope="col" class="sort" data-sort="route">Bus Number</th>
-
+                                    <th scope="col" class="sort" data-sort="route">Driver Name</th>
                                     <th scope="col" class="sort" data-sort="route">Driver Phone</th>
                                     <th scope="col" class="sort" data-sort="route">Current Stop</th>
                                     <th scope="col" class="sort" data-sort="route">Next Stop</th>
-                                    <th scope="col" class="sort" data-sort="route">Expect Time To Arrive At College</th>
                                     <th scope="col" class="sort" data-sort="route">Status</th>
 
                                     <th scope="col"></th>
@@ -85,15 +84,21 @@
             </div>
         </div>
         <script>
-
             getData();
 
             function getData() {
                 var xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
+                        var $tbody = $('#tablebody');
                         // Typical action to be performed when the document is ready:
-                        document.getElementById("tablebody").innerHTML = xhttp.responseText;
+                        var obj=JSON.parse(xhttp.responseText);
+                        console.log(obj.data);
+                        obj.data.forEach((item, index, arr)=> {
+                            console.log(item.bus_no);
+                            $tbody.html('<td>'+item.service_id+'</td><td>'+item.route_name+'</td><td>'+item.bus_no+'</td><td>'+item.driver_name+'</td><td>'+item.driver_phone+'</td><td>'+item.current_stop+'</td><td>'+item.next_stop+'</td><td>'+item.status+'</td>');
+                            })
+                        
                     }
                 };
                 xhttp.open("GET", "/admin/getServiceData", true);

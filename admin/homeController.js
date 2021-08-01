@@ -81,6 +81,37 @@ const addBusView = (req, res, next) => {
 }
 
 
+const addBusPostView = (req, res, next) => {
+
+    const body = req.body;
+    console.log(body);
+    pool.query(
+        "INSERT INTO `buses`(`bus_no`, `bus_name`, `bus_type`, `capacity`) VALUES (?,?,?,?)",
+        [
+            body.bus_no,
+            body.bus_name,
+            body.bus_type,
+            "All the best"
+        ],
+        (error, results, fields) => {
+            if (error) {
+                alert(error);
+                res.render('bus', { 'username': req.session.name });
+            }
+            else {
+            alert('Bus Added Successfully!!');
+            res.redirect('bus');
+            }
+        }
+    );
+
+    // res.render('stops', { 'username': req.session.name });
+}
+
+
+
+
+
 
 
 
@@ -95,25 +126,26 @@ const addServiceView = (req, res, next) => {
 
     pool.query(
 
-        "select name,id from routes",
+        "select route_name,id from routes",
         [
 
         ],
         (error, routes, fields) => {
             console.log(routes);
             pool.query(
-                "select 'bus_no','id','bus_name','bus_type' from buses",
+                "select * from buses",
                 [
 
                 ],
                 (error, buses, fields) => {
 
                     pool.query(
-                        "select 'name','phone' from drivers",
+                        "select id,name,phone from drivers",
                         [
 
                         ],
                         (error, drivers, fields) => {
+                            console.log(buses);
                             res.render('addservice', { 'username': req.session.name, drivers: drivers, buses, buses, routes: routes });
 
                         }
@@ -129,6 +161,38 @@ const addServiceView = (req, res, next) => {
 
 
 
+}
+
+
+const addServicePostView = (req, res, next) => {
+
+    const body = req.body;
+    console.log(body);
+    pool.query(
+        "INSERT INTO `services`(`service_id`, `route_id`, `route_name`, `driver_id`, `driver_name`, `driver_phone`,`bus_no`) VALUES(?,?,?,?,?,?,?)",
+        [
+            body.service_no,
+            body.route_id,
+            body.route_name,
+            body.driver_id,
+            body.driver_name,
+            body.driver_phone,
+            body.bus_no,
+
+        ],
+        (error, results, fields) => {
+            if (error) {
+                alert(error);
+                res.render('service', { 'username': req.session.name });
+            }
+            else {
+            alert('Service Added Successfully!!');
+            res.redirect('service');
+            }
+        }
+    );
+
+    // res.render('stops', { 'username': req.session.name });
 }
 
 
@@ -364,6 +428,27 @@ const loginValidate = (req, res, next) => {
 }
 
 
+
+
+const testApi = (req, res, next) => {
+
+    pool.query(
+
+        "select * from buses",
+        [
+
+        ],
+        (error, routes, fields) => {
+            res.json({
+                error:error,
+                routes:routes
+            });
+        }
+    );
+}
+
+
+
 module.exports = {
     indexView,
     mapView,
@@ -380,8 +465,11 @@ module.exports = {
     addStoppageView,
     addStoppageViewPost,
     addBusView,
+    addBusPostView,
     serviceView,
     serviceData,
-    addServiceView
+    addServiceView,
+    addServicePostView,
+    testApi
 
 }
